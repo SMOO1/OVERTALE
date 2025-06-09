@@ -7,7 +7,10 @@ public class GameScreen extends JPanel implements ActionListener {
     private GameWindow window; //reference to main window
     private Timer timer; //game loop timer
     private Player player; //player object
-    private Boss boss; //boss object
+    //private OrbBoss orbBoss; //boss object
+    private LaserBoss laserBoss; 
+    private LaserBoss laserBoss2; 
+    //private HorridHarrell harrell; 
     private int score; //current score
     private String playerName; //player name
     private boolean gameRunning = false; //game state flag
@@ -34,7 +37,10 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public void startGame() {
         player = new Player(400, 300); //reset player
-        boss = new Boss(200, 200); //reset boss
+        //orbBoss = new OrbBoss(200, 200); //reset boss
+        laserBoss = new LaserBoss(200, 200, player);
+        laserBoss2 = new LaserBoss(200, 400, player);
+        //harrell = new HorridHarrell(200,200);
         score = 0; //reset score
         gameRunning = true; //set game state
         timer.start(); //start game loop
@@ -66,10 +72,40 @@ public class GameScreen extends JPanel implements ActionListener {
         }
         //update game objects
         player.update();
-        boss.update();
+        //harrell.update(); 
+        laserBoss.update();
+        laserBoss2.update(); 
+        //orbBoss.update();
 
+         
+       //laser tings
+        ArrayList<Laser> lasers = laserBoss.getLasers();
+        for (int i = lasers.size()-1; i >= 0; i--) {
+            Laser laser = lasers.get(i);
+            if (laser.isActive() && laser.collidesWith(player)) {
+                gameRunning = false;
+                timer.stop();
+                window.showEndScreen(score, playerName);
+                return;
+            }
+        }
+
+        ArrayList<Laser> lasers2 = laserBoss2.getLasers();
+        for (int i = lasers2.size()-1; i >= 0; i--) {
+            Laser laser = lasers2.get(i);
+            if (laser.isActive() && laser.collidesWith(player)) {
+                gameRunning = false;
+                timer.stop();
+                window.showEndScreen(score, playerName);
+                return;
+            }
+        }
+        
+
+
+        /* 
         //check orb collisions
-        ArrayList<Orb> orbs = boss.getOrbs();
+        ArrayList<Orb> orbs = orbBoss.getOrbs();
         for (int i = orbs.size()-1;i>=0; i--) {
             Orb orb = orbs.get(i);
             if (player.collidesWith(orb)) {
@@ -79,6 +115,16 @@ public class GameScreen extends JPanel implements ActionListener {
                 return;
             }
         }
+        */
+
+        /* 
+        if(harrell.collidesWith(player)){
+            gameRunning = false; 
+            timer.stop();
+            window.showEndScreen(score, playerName);
+            return;
+        }
+        */
 
         score++; //increase score
         repaint(); //redraw screen
@@ -90,11 +136,34 @@ public class GameScreen extends JPanel implements ActionListener {
 
         //draw game objects
         player.draw(g);
-        boss.draw(g);
+        //harrell.draw(g);
+
+        
+        laserBoss.draw(g);
+        laserBoss2.draw(g);
+        //orbBoss.draw(g);
+
+
         //draw orbs
-        for (Orb orb : boss.getOrbs()) {
+        /* 
+        for (Orb orb : orbBoss.getOrbs()) {
             orb.draw(g);
         }
+
+        */
+
+
+         
+        //draw lasers
+        for(Laser laser: laserBoss.getLasers()){
+            laser.draw(g);
+        }
+
+        for(Laser laser: laserBoss2.getLasers()){
+            laser.draw(g);
+        }
+        
+
 
         //draw score info
         g.setColor(Color.WHITE);
