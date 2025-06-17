@@ -1,10 +1,2 @@
 null - 0
 null - 0
-null - 0
-null - 0
-null - 0
-null - 0
-sasha - 0
-sasha - 0
-aws - 89
-eaeaee - 18
