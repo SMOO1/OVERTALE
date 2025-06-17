@@ -36,3 +36,5 @@ dwad - 190
 dwad - 430
 dwad - 990
 dsds - 750
+wdaw - 80
+dw - 50
